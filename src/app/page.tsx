@@ -234,7 +234,7 @@
 "use client";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -246,6 +246,14 @@ import {
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { HeroScene } from "@/components/site/HeroScene";
+import { client } from "@/sanity/client";
+import { createImageUrlBuilder } from "@sanity/image-url";
+
+const imgBuilder = createImageUrlBuilder({ projectId: "0jkfefce", dataset: "production" });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function urlFor(source: any) { return imgBuilder.image(source).auto("format").url(); }
+
+type FeaturedStartup = { _id: string; name: string; mtsb?: string; logoUrl?: string; url?: string; };
 
 const blocks = [
   { icon: Layers, title: "Venture Building", desc: "From idea to launch — we build alongside founders.", to: "/platform", tag: null as string | null, span: "md:col-span-3 md:row-span-2" },
@@ -256,12 +264,6 @@ const blocks = [
 
 const journey = ["Idea", "Build", "Validate", "Scale", "Global"] as const;
 
-const featuredStartups = [
-  { name: "Benefiti", desc: "B2B benefits & rewards", industry: "HR-Tech", id: 43 },
-  { name: "YachtHe", desc: "Yacht charter marketplace", industry: "Travel", id: 42 },
-  { name: "WhereToPark", desc: "Smart parking discovery", industry: "Mobility", id: 41 },
-  { name: "Dr. Knight", desc: "WIPO Award winner", industry: "HealthTech", id: 39 },
-];
 
 const news = [
   { date: "30 Nov 2025", tag: "Award", title: "Dr. Knight received the WIPO Award" },
@@ -275,6 +277,21 @@ export default function Home() {
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+
+  const [featuredStartups, setFeaturedStartups] = useState<FeaturedStartup[]>([]);
+  useEffect(() => {
+    client.fetch<any[]>(
+      `*[_type == "startup" && featured == true] | order(order asc) { _id, name, mtsb, url, logo }`
+    ).then((data) => {
+      setFeaturedStartups(data.map((s) => ({
+        _id: s._id,
+        name: s.name,
+        mtsb: s.mtsb,
+        url: s.url,
+        logoUrl: s.logo ? urlFor(s.logo) : undefined,
+      })));
+    }).catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -475,30 +492,34 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {featuredStartups.map((s, i) => (
               <motion.a
-                key={s.name}
-                href={`https://digitalden.me/startup/${s.id}`}
-                target="_blank"
+                key={s._id}
+                href={s.url ?? "/portfolio"}
+                target={s.url ? "_blank" : undefined}
                 rel="noreferrer"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.07 }}
-                className="group relative glass-card p-6 aspect-square flex flex-col justify-between overflow-hidden hover:border-accent/60 transition-all duration-500"
+                className="group relative glass-card overflow-hidden hover:border-accent/60 transition-all duration-500 hover-lift flex flex-col"
               >
-                <div className="flex items-center justify-between">
-                  <div className="size-12 rounded-full bg-gradient-primary grid place-items-center text-base font-display font-bold shadow-[0_8px_24px_-8px_var(--color-accent)]">
-                    {s.name[0]}
+                {/* Logo area */}
+                <div className="h-32 bg-white flex items-center justify-center p-4 shrink-0">
+                  {s.logoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={s.logoUrl} alt={s.name} className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="size-12 rounded-xl bg-gradient-primary grid place-items-center text-lg font-display font-bold">
+                      {s.name[0]}
+                    </div>
+                  )}
+                </div>
+                <div className="p-4 flex items-start justify-between gap-2">
+                  <div>
+                    <h4 className="font-display text-sm font-bold uppercase leading-tight group-hover:text-accent transition-colors">{s.name}</h4>
+                    {s.mtsb && <p className="font-mono text-[9px] uppercase tracking-widest text-accent mt-1">{s.mtsb}</p>}
                   </div>
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground border border-border px-2 py-1 rounded-full">
-                    {s.industry}
-                  </span>
+                  <ArrowUpRight size={13} className="text-accent shrink-0 group-hover:rotate-45 transition-transform mt-0.5" />
                 </div>
-                <div>
-                  <h4 className="font-display text-lg md:text-xl font-bold uppercase leading-tight">{s.name}</h4>
-                  <p className="text-xs text-muted-foreground mt-1 transition-colors group-hover:text-foreground/80">{s.desc}</p>
-                  <ArrowUpRight size={16} className="mt-3 text-accent group-hover:rotate-45 transition-transform" />
-                </div>
-                <div className="absolute -bottom-16 -right-16 size-40 bg-accent/15 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               </motion.a>
             ))}
           </div>
@@ -515,14 +536,15 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="relative aspect-[2/1] rounded-2xl overflow-hidden border border-border bg-surface">
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0" style={{
-              backgroundImage: "radial-gradient(circle at 1px 1px, rgba(167,139,250,0.4) 1px, transparent 0)",
-              backgroundSize: "22px 22px"
-            }} />
-          </div>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_var(--color-background)_100%)] opacity-80" />
+        <div className="relative aspect-[2/1] rounded-2xl overflow-hidden bg-surface">
+          {/* World map image */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/worldmap.png"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none select-none"
+          />
 
           {/* Region pin overlays for label clarity */}
           {[

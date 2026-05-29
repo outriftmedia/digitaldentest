@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-05-21T11:44:52.241Z",
+  "createdAt": "2026-05-29T05:23:54.867Z",
   "studioVersion": "5.26.0",
   "version": 3,
   "workspaces": [
@@ -13,7 +13,7 @@
       },
       "name": "digital-den",
       "projectId": "0jkfefce",
-      "schema": "5b814527.create-schema.json",
+      "schema": "fbd6a2fc.create-schema.json",
       "title": "Digital Den",
       "tools": "ef87c8fe.create-tools.json"
     }

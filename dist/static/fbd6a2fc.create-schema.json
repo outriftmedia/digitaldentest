@@ -1,0 +1,598 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Startup Name"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "logo",
+        "type": "image"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "coverImage",
+        "type": "image"
+      },
+      {
+        "of": [
+          {
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "level": "error",
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                }
+              ]
+            },
+            "of": [],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              }
+            ],
+            "type": "block"
+          }
+        ],
+        "name": "description",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "url",
+        "type": "url",
+        "title": "External URL"
+      },
+      {
+        "name": "mtsb",
+        "type": "string",
+        "title": "MTSB Program (e.g. MTSB I, MTSB IV)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "level": "error",
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ]
+                  }
+                ],
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "designation",
+                "type": "string",
+                "title": "Designation / Role"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image",
+                "title": "Photo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "teamMembers",
+        "type": "array"
+      },
+      {
+        "name": "featured",
+        "type": "boolean",
+        "title": "Show on homepage?"
+      },
+      {
+        "name": "order",
+        "type": "number"
+      }
+    ],
+    "name": "startup",
+    "type": "document",
+    "title": "Portfolio Startups"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Program Title"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            "Open",
+            "Ongoing",
+            "Closed"
+          ]
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "Open",
+                  "Ongoing",
+                  "Closed"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "name": "order",
+        "type": "number"
+      }
+    ],
+    "name": "program",
+    "type": "document",
+    "title": "Programs"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Partner Name"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Upload the partner logo (white/transparent version recommended for dark backgrounds).",
+        "name": "logo",
+        "type": "image"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "url",
+        "type": "url",
+        "title": "Website URL"
+      },
+      {
+        "options": {
+          "list": [
+            "Local",
+            "Regional",
+            "International"
+          ]
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "Local",
+                  "Regional",
+                  "International"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "description": "Lower numbers appear first.",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      }
+    ],
+    "name": "partner",
+    "type": "document",
+    "title": "Partners"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Event Title"
+      },
+      {
+        "of": [
+          {
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "level": "error",
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Bold"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                }
+              ]
+            },
+            "of": [],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              }
+            ],
+            "type": "block"
+          }
+        ],
+        "name": "description",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "date",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Event photo or banner image.",
+        "name": "image",
+        "type": "image",
+        "title": "Cover Image"
+      },
+      {
+        "options": {
+          "list": [
+            "Digital Den Connects",
+            "Others",
+            "Upcoming"
+          ]
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "Digital Den Connects",
+                  "Others",
+                  "Upcoming"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "name": "vertical",
+        "type": "string",
+        "title": "Vertical (for roundtables)"
+      },
+      {
+        "name": "location",
+        "type": "string"
+      }
+    ],
+    "name": "event",
+    "type": "document",
+    "title": "Events"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "News Title"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "date",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "url",
+        "type": "url",
+        "title": "Link (optional)"
+      },
+      {
+        "name": "order",
+        "type": "number"
+      }
+    ],
+    "name": "news",
+    "type": "document"
+  }
+]
