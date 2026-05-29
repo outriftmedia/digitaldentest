@@ -23,7 +23,11 @@ export function Nav() {
       </Link>
       <div className="hidden md:flex gap-8 text-xs font-medium uppercase tracking-[0.2em] text-white items-center">
         {links.map((l) => (
-          <Link key={l.href} href={l.href} className={`hover:text-accent transition-colors ${pathname === l.href ? "text-accent" : ""}`}>
+          <Link
+            key={l.href}
+            href={l.href}
+            className={`hover:text-accent transition-colors ${pathname === l.href ? "text-accent" : ""}`}
+          >
             {l.label}
           </Link>
         ))}
@@ -38,7 +42,12 @@ export function Nav() {
         <div className="absolute top-full left-0 right-0 bg-background border-t border-border md:hidden mix-blend-normal">
           <div className="flex flex-col p-6 gap-4 text-sm uppercase tracking-widest">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className={`hover:text-accent ${pathname === l.href ? "text-accent" : ""}`}>
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className={`hover:text-accent ${pathname === l.href ? "text-accent" : ""}`}
+              >
                 {l.label}
               </Link>
             ))}
