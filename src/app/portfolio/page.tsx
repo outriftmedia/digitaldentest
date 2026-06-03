@@ -34,15 +34,6 @@ export type Startup = {
   teamMembers?: TeamMember[];
 };
 
-const FALLBACK: Startup[] = [
-  { _id: "f1", name: "Benefiti", url: "https://digitalden.me/startup/43" },
-  { _id: "f2", name: "YachtHe", url: "https://digitalden.me/startup/42" },
-  { _id: "f3", name: "WhereToPark", url: "https://digitalden.me/startup/41" },
-  { _id: "f4", name: "SanyView", url: "https://digitalden.me/startup/40" },
-  { _id: "f5", name: "Pet Travel Advisor" },
-  { _id: "f6", name: "Dr. Knight", url: "https://digitalden.me/startup/39" },
-];
-
 async function getStartups(): Promise<Startup[]> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,7 +45,6 @@ async function getStartups(): Promise<Startup[]> {
         "teamSize": count(teamMembers)
       }`
     );
-    if (data.length === 0) return FALLBACK;
     return data.map((s) => ({
       _id: s._id,
       name: s.name,
@@ -71,7 +61,7 @@ async function getStartups(): Promise<Startup[]> {
       })),
     }));
   } catch {
-    return FALLBACK;
+    return [];
   }
 }
 
