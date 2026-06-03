@@ -127,9 +127,7 @@ export default function PlatformPage() {
       <section className="px-6 md:px-10 py-20 bg-surface">
         <div className="max-w-6xl mx-auto">
           <div className="mb-16 flex items-end justify-between gap-6 flex-wrap">
-            <h2 className="text-3xl md:text-5xl font-display font-bold uppercase max-w-xl leading-[0.95]">
-              How startups move through Digital Den.
-            </h2>
+            <h2 className="text-3xl md:text-5xl font-display font-bold uppercase max-w-xl leading-[0.95]">How startups move through Digital Den.</h2>
             <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-muted-foreground">— Ecosystem flow</span>
           </div>
 

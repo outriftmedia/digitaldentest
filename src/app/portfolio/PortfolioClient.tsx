@@ -194,9 +194,9 @@ export function PortfolioClient({ startups }: { startups: Startup[] }) {
 
   return (
     <>
-      <section className="px-6 md:px-10 pt-40 pb-16 max-w-7xl mx-auto">
+      <section className="px-6 md:px-10 pt-28 pb-12 max-w-7xl mx-auto enter-fade-up">
         <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-6 block">— Portfolio</span>
-        <h1 className="text-5xl md:text-8xl font-display font-bold uppercase leading-[0.9] tracking-tighter mb-10">
+        <h1 className="text-5xl md:text-7xl font-display font-bold uppercase leading-[0.95] tracking-tighter mb-10 max-w-4xl">
           Startups<br />we back.
         </h1>
       </section>

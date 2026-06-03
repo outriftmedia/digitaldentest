@@ -1,10 +1,10 @@
 type Region = { name: string; x: number; y: number; r?: number };
 
 const DEFAULT_REGIONS: Region[] = [
-  { name: "USA", x: 22, y: 40, r: 36 },
-  { name: "Benelux", x: 48.5, y: 32, r: 14 },
-  { name: "Western Balkans", x: 52, y: 40, r: 16 },
-  { name: "Jordan", x: 57.5, y: 46, r: 12 },
+  { name: "USA", x: 20, y: 40, r: 36 },
+  { name: "Benelux", x: 46.5, y: 32, r: 14 },
+  { name: "Western Balkans", x: 50, y: 40, r: 16 },
+  { name: "Jordan", x: 55.5, y: 46, r: 12 },
 ];
 
 export function WorldMap({
@@ -26,10 +26,6 @@ export function WorldMap({
         loading="lazy"
         draggable={false}
         className="pointer-events-none select-none absolute inset-0 w-full h-full object-cover"
-        style={{
-          filter:
-            "brightness(0) saturate(100%) invert(63%) sepia(58%) saturate(2316%) hue-rotate(229deg) brightness(101%) contrast(94%) opacity(0.22)",
-        }}
       />
       <svg
         viewBox="0 0 100 50"

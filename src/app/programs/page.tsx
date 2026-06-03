@@ -30,12 +30,12 @@ export default function ProgramsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
-      <section className="px-6 md:px-10 pt-40 pb-16 max-w-7xl mx-auto">
-        <span className="font-mono text-xs uppercase tracking-[0.3em] text-accent mb-6 block">Programs</span>
-        <h1 className="text-5xl md:text-8xl font-display font-bold uppercase leading-[0.9] tracking-tighter mb-10">
+      <section className="px-6 md:px-10 pt-28 pb-12 max-w-7xl mx-auto enter-fade-up">
+        <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-6 block">Programs</span>
+        <h1 className="text-5xl md:text-7xl font-display font-bold uppercase leading-[0.95] tracking-tighter mb-10">
           Build · Validate · Scale.
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl">
+        <p className="text-lg text-muted-foreground max-w-3xl">
           One consistent structure across every Digital Den program — see what's open, what's ongoing, and what's already shipped.
         </p>
       </section>

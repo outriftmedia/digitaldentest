@@ -110,12 +110,12 @@ export default async function PartnersPage() {
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
 
-      <section className="px-6 md:px-10 pt-40 pb-16 max-w-7xl mx-auto">
+      <section className="px-6 md:px-10 pt-28 pb-12 max-w-7xl mx-auto enter-fade-up">
         <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-6 block">— Partners</span>
-        <h1 className="text-5xl md:text-8xl font-display font-bold uppercase leading-[0.9] tracking-tighter mb-6">
+        <h1 className="text-5xl md:text-7xl font-display font-bold uppercase leading-[0.95] tracking-tighter mb-10 max-w-4xl">
           A network<br />without borders.
         </h1>
-        <p className="text-lg text-muted-foreground max-w-xl">
+        <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
           Institutions, universities and organisations across four continents that make the Digital Den ecosystem possible.
         </p>
       </section>
@@ -126,9 +126,9 @@ export default async function PartnersPage() {
           if (list.length === 0) return null;
           return (
             <div key={group}>
-              <div className="flex items-baseline gap-4 mb-8 border-b border-border pb-4">
-                <h2 className="text-3xl md:text-5xl font-display font-bold uppercase">{group}</h2>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                <div className="flex items-baseline gap-4 mb-8 border-b border-border pb-4 enter-fade-up">
+                <h2 className="text-3xl md:text-4xl font-display font-bold uppercase">{group}</h2>
+                <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-muted-foreground">
                   {list.length} partner{list.length !== 1 ? "s" : ""}
                 </span>
               </div>
