@@ -262,6 +262,13 @@ type PersonDoc = { _id: string; name: string; designation?: string; linkedin?: s
 type AboutDoc = { definition?: PortableTextBlock[]; image?: SanityImageSource; };
 type LandingAboutData = { definition?: PortableTextBlock[]; imageUrl?: string; ddTeam: Person[]; };
 
+const fallbackFeaturedStartups: FeaturedStartup[] = [
+  { _id: "fallback-benefiti", name: "Benefiti", mtsb: "B2B benefits", url: "https://digitalden.me/startup/43" },
+  { _id: "fallback-yachthe", name: "YachtHe", mtsb: "Marketplace", url: "https://digitalden.me/startup/42" },
+  { _id: "fallback-wheretopark", name: "WhereToPark", mtsb: "Mobility", url: "https://digitalden.me/startup/41" },
+  { _id: "fallback-dr-knight", name: "Dr. Knight", mtsb: "Healthtech", url: "https://digitalden.me/startup/39" },
+];
+
 const blocks = [
   { icon: Layers, title: "Venture Building", desc: "From idea to launch — we build alongside founders.", to: "/platform", tag: null as string | null, span: "md:col-span-3 md:row-span-2" },
   { icon: Rocket, title: "Programs", desc: "Acceleration tracks across the Balkans, Europe and the US.", to: "/programs", tag: null, span: "md:col-span-2" },
@@ -285,13 +292,14 @@ export default function Home() {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
-  const [featuredStartups, setFeaturedStartups] = useState<FeaturedStartup[]>([]);
+  const [featuredStartups, setFeaturedStartups] = useState<FeaturedStartup[]>(fallbackFeaturedStartups);
   const [aboutData, setAboutData] = useState<LandingAboutData>({ ddTeam: [] });
 
   useEffect(() => {
     client.fetch<FeaturedStartupDoc[]>(
       `*[_type == "startup" && featured == true] | order(order asc) { _id, name, mtsb, url, logo }`
     ).then((data) => {
+      if (data.length === 0) return;
       setFeaturedStartups(data.map((s) => ({
         _id: s._id,
         name: s.name,
