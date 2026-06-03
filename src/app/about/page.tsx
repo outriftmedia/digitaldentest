@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { client } from "@/sanity/client";
 import { createImageUrlBuilder } from "@sanity/image-url";
+import type { SanityImageSource } from "@sanity/image-url";
+import type { PortableTextBlock } from "@sanity/types";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { AboutClient } from "./AboutClient";
@@ -11,8 +13,7 @@ export const metadata: Metadata = {
 };
 
 const builder = createImageUrlBuilder({ projectId: "0jkfefce", dataset: "production" });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function urlFor(source: any): string {
+function urlFor(source: SanityImageSource): string {
   return builder.image(source).auto("format").url();
 }
 
@@ -26,18 +27,31 @@ export type Person = {
 };
 
 export type AboutData = {
-  definition?: any[];
+  definition?: PortableTextBlock[];
   imageUrl?: string;
   ddTeam: Person[];
-  advisoryBoard: Person[];
+};
+
+type AboutDoc = {
+  definition?: PortableTextBlock[];
+  image?: SanityImageSource;
+};
+
+type PersonDoc = {
+  _id: string;
+  name: string;
+  designation?: string;
+  description?: string;
+  linkedin?: string;
+  photo?: SanityImageSource;
+  type?: string;
 };
 
 async function getAboutData(): Promise<AboutData> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [aboutDoc, people] = await Promise.all([
-      client.fetch<any>(`*[_type == "about"][0]{ definition, image }`),
-      client.fetch<any[]>(`*[_type == "person"] | order(order asc, name asc){ _id, name, designation, description, linkedin, photo, type }`),
+      client.fetch<AboutDoc | null>(`*[_type == "about"][0]{ definition, image }`),
+      client.fetch<PersonDoc[]>(`*[_type == "person"] | order(order asc, name asc){ _id, name, designation, description, linkedin, photo, type }`),
     ]);
 
     return {
@@ -46,12 +60,9 @@ async function getAboutData(): Promise<AboutData> {
       ddTeam: people
         .filter((p) => p.type === "DD Team")
         .map((p) => ({ _id: p._id, name: p.name, designation: p.designation, description: p.description, linkedin: p.linkedin, photoUrl: p.photo ? urlFor(p.photo) : undefined })),
-      advisoryBoard: people
-        .filter((p) => p.type === "Advisory Board")
-        .map((p) => ({ _id: p._id, name: p.name, designation: p.designation, description: p.description, linkedin: p.linkedin, photoUrl: p.photo ? urlFor(p.photo) : undefined })),
     };
   } catch {
-    return { ddTeam: [], advisoryBoard: [] };
+    return { ddTeam: [] };
   }
 }
 

@@ -243,17 +243,24 @@ import {
   Globe2,
   TrendingUp,
 } from "lucide-react";
+import { PortableText } from "@portabletext/react";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { HeroScene } from "@/components/site/HeroScene";
 import { client } from "@/sanity/client";
 import { createImageUrlBuilder } from "@sanity/image-url";
+import type { SanityImageSource } from "@sanity/image-url";
+import type { PortableTextBlock } from "@sanity/types";
 
 const imgBuilder = createImageUrlBuilder({ projectId: "0jkfefce", dataset: "production" });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function urlFor(source: any) { return imgBuilder.image(source).auto("format").url(); }
+function urlFor(source: SanityImageSource) { return imgBuilder.image(source).auto("format").url(); }
 
 type FeaturedStartup = { _id: string; name: string; mtsb?: string; logoUrl?: string; url?: string; };
+type FeaturedStartupDoc = { _id: string; name: string; mtsb?: string; url?: string; logo?: SanityImageSource; };
+type Person = { _id: string; name: string; designation?: string; linkedin?: string; photoUrl?: string; };
+type PersonDoc = { _id: string; name: string; designation?: string; linkedin?: string; photo?: SanityImageSource; type?: string; };
+type AboutDoc = { definition?: PortableTextBlock[]; image?: SanityImageSource; };
+type LandingAboutData = { definition?: PortableTextBlock[]; imageUrl?: string; ddTeam: Person[]; };
 
 const blocks = [
   { icon: Layers, title: "Venture Building", desc: "From idea to launch — we build alongside founders.", to: "/platform", tag: null as string | null, span: "md:col-span-3 md:row-span-2" },
@@ -279,8 +286,10 @@ export default function Home() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   const [featuredStartups, setFeaturedStartups] = useState<FeaturedStartup[]>([]);
+  const [aboutData, setAboutData] = useState<LandingAboutData>({ ddTeam: [] });
+
   useEffect(() => {
-    client.fetch<any[]>(
+    client.fetch<FeaturedStartupDoc[]>(
       `*[_type == "startup" && featured == true] | order(order asc) { _id, name, mtsb, url, logo }`
     ).then((data) => {
       setFeaturedStartups(data.map((s) => ({
@@ -290,6 +299,25 @@ export default function Home() {
         url: s.url,
         logoUrl: s.logo ? urlFor(s.logo) : undefined,
       })));
+    }).catch(() => {});
+
+    Promise.all([
+      client.fetch<AboutDoc | null>(`*[_type == "about"][0]{ definition, image }`),
+      client.fetch<PersonDoc[]>(`*[_type == "person"] | order(order asc, name asc){ _id, name, designation, linkedin, photo, type }`),
+    ]).then(([aboutDoc, people]) => {
+      setAboutData({
+        definition: aboutDoc?.definition,
+        imageUrl: aboutDoc?.image ? urlFor(aboutDoc.image) : undefined,
+        ddTeam: people
+          .filter((p) => p.type === "DD Team")
+          .map((p) => ({
+            _id: p._id,
+            name: p.name,
+            designation: p.designation,
+            linkedin: p.linkedin,
+            photoUrl: p.photo ? urlFor(p.photo) : undefined,
+          })),
+      });
     }).catch(() => {});
   }, []);
 
@@ -381,10 +409,57 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ABOUT — pulled into the landing page */}
+      <section className="px-6 md:px-10 py-28 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start mb-20">
+          <div>
+            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-6 block">— 01 / About Digital Den</span>
+            <h2 className="text-4xl md:text-6xl font-display font-bold uppercase leading-[0.95] mb-8">
+              Rub<br />the Hub.
+            </h2>
+            {aboutData.definition ? (
+              <div className="text-base md:text-lg text-muted-foreground leading-relaxed [&_strong]:text-foreground [&_strong]:font-bold [&_em]:italic [&_p]:mb-4 last:[&_p]:mb-0">
+                <PortableText value={aboutData.definition} />
+              </div>
+            ) : (
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                Digital Den is a startup launch platform and venture studio. We build alongside founders from the first idea to international markets through programs, capital access and a network spanning four continents.
+              </p>
+            )}
+          </div>
+
+          <div className="relative aspect-4/3 rounded-2xl overflow-hidden border border-border bg-surface">
+            {aboutData.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={aboutData.imageUrl} alt="Digital Den" className="w-full h-full object-cover" />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-primary grid place-items-center">
+                <span className="font-display text-4xl md:text-6xl font-bold uppercase text-background/80">Digital Den</span>
+              </div>
+            )}
+            <div className="absolute inset-0 bg-linear-to-t from-background/30 to-transparent pointer-events-none" />
+          </div>
+        </div>
+
+        {aboutData.ddTeam.length > 0 && (
+          <div>
+            <div className="mb-10">
+              <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— DD Team</span>
+              <h3 className="text-3xl md:text-4xl font-display font-bold uppercase">People behind Digital Den.</h3>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+              {aboutData.ddTeam.map((person, i) => (
+                <LandingTeamCard key={person._id} person={person} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
+
       {/* WHAT IS DIGITAL DEN — 2x2 staggered bento */}
       <section className="px-6 md:px-10 py-28 max-w-7xl mx-auto">
         <div className="mb-16 max-w-3xl">
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 01 / The Ecosystem</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 02 / The Ecosystem</span>
           <h2 className="text-4xl md:text-6xl font-display font-bold uppercase leading-[0.95]">
             A launch platform for ambitious founders.
           </h2>
@@ -425,7 +500,7 @@ export default function Home() {
       <section className="px-6 md:px-10 py-28 bg-surface relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20">
-            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 02 / Startup Journey</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 03 / Startup Journey</span>
             <h2 className="text-4xl md:text-6xl font-display font-bold uppercase whitespace-nowrap">From idea to global.</h2>
           </div>
 
@@ -529,7 +604,7 @@ export default function Home() {
       {/* GLOBAL PRESENCE — real outline + highlighted regions */}
       <section className="px-6 md:px-10 py-28 max-w-7xl mx-auto">
         <div className="mb-16 max-w-3xl">
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 03 / Global Presence</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 04 / Global Presence</span>
           <h2 className="text-4xl md:text-6xl font-display font-bold uppercase leading-[0.95]">Operating worldwide.</h2>
           <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-2xl">
             Four operational regions, one ecosystem — Western Balkans, Benelux, USA and Jordan.
@@ -580,10 +655,10 @@ export default function Home() {
       {/* FINAL CTA — narrower form */}
       <section className="px-6 md:px-10 py-28 max-w-2xl mx-auto">
         <div className="text-center mb-10">
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 05 / Get in touch</span>
-          <h2 className="text-4xl md:text-5xl font-display font-bold uppercase">Let's talk.</h2>
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 06 / Get in touch</span>
+          <h2 className="text-4xl md:text-5xl font-display font-bold uppercase">Let&apos;s talk.</h2>
           <p className="text-muted-foreground mt-4 text-sm md:text-base max-w-md mx-auto">
-            Whether you're a founder, partner or investor — we read every message.
+            Whether you&apos;re a founder, partner or investor — we read every message.
           </p>
         </div>
         <form className="space-y-4 glass-card p-6 md:p-8 rounded-2xl" onSubmit={(e) => e.preventDefault()}>
@@ -609,6 +684,48 @@ export default function Home() {
   );
 }
 
+function LandingTeamCard({ person, index = 0 }: { person: Person; index?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
+      className="group"
+    >
+      <div className="relative aspect-3/4 overflow-hidden rounded-xl mb-4 bg-surface border border-border group-hover:border-accent/50 transition-colors duration-500">
+        {person.photoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={person.photoUrl} alt={person.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        ) : (
+          <div className="w-full h-full bg-gradient-primary grid place-items-center text-4xl font-display font-bold">
+            {person.name[0]}
+          </div>
+        )}
+        {person.linkedin && (
+          <a
+            href={person.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${person.name} LinkedIn`}
+            className="absolute bottom-3 right-3 size-9 grid place-items-center rounded-full bg-background/80 backdrop-blur border border-border text-muted-foreground hover:border-accent hover:text-accent transition-all opacity-0 group-hover:opacity-100 duration-300"
+          >
+            <ArrowUpRight size={14} />
+          </a>
+        )}
+      </div>
+      <h4 className="font-display font-bold uppercase text-base leading-tight group-hover:text-accent transition-colors">
+        {person.name}
+      </h4>
+      {person.designation && (
+        <p className="font-mono text-[10px] uppercase tracking-widest text-accent mt-1">
+          {person.designation}
+        </p>
+      )}
+    </motion.div>
+  );
+}
+
 function NewsCarousel() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
@@ -621,7 +738,7 @@ function NewsCarousel() {
     <section className="py-28 bg-surface relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-10 mb-14 flex justify-between items-end gap-6 flex-wrap">
         <div>
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-3 block">— 04 / News</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-3 block">— 05 / News</span>
           <h2 className="text-4xl md:text-5xl font-display font-bold uppercase">Latest updates.</h2>
         </div>
         <div className="flex gap-2">

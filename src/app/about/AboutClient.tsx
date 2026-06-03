@@ -56,61 +56,6 @@ function TeamCard({ person, index = 0 }: { person: Person; index?: number }) {
   );
 }
 
-/* Editorial horizontal card — Advisory Board */
-function AdvisoryCard({ person, index = 0 }: { person: Person; index?: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.55, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className="group grid grid-cols-[auto_1fr] gap-6 py-8 border-b border-border last:border-0 items-start"
-    >
-      {/* Photo */}
-      <div className="size-20 md:size-24 rounded-xl overflow-hidden border border-border group-hover:border-accent/50 transition-colors duration-500 shrink-0">
-        {person.photoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={person.photoUrl} alt={person.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-        ) : (
-          <div className="w-full h-full bg-gradient-primary grid place-items-center text-2xl font-display font-bold">
-            {person.name[0]}
-          </div>
-        )}
-      </div>
-
-      {/* Info */}
-      <div className="flex-1">
-        <div className="flex items-start justify-between gap-4 mb-2">
-          <div>
-            <h3 className="font-display font-bold uppercase text-xl md:text-2xl leading-tight group-hover:text-accent transition-colors">
-              {person.name}
-            </h3>
-            {person.designation && (
-              <p className="font-mono text-[10px] uppercase tracking-widest text-accent mt-1">
-                {person.designation}
-              </p>
-            )}
-          </div>
-          {person.linkedin && (
-            <a
-              href={person.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`${person.name} LinkedIn`}
-              className="shrink-0 size-9 grid place-items-center rounded-full border border-border hover:border-accent hover:text-accent transition-colors"
-            >
-              <LinkedInIcon />
-            </a>
-          )}
-        </div>
-        {person.description && (
-          <p className="text-sm text-muted-foreground leading-relaxed">{person.description}</p>
-        )}
-      </div>
-    </motion.div>
-  );
-}
-
 export function AboutClient({ data }: { data: AboutData }) {
   return (
     <>
@@ -175,26 +120,6 @@ export function AboutClient({ data }: { data: AboutData }) {
         </div>
       </section>
 
-      {/* ADVISORY BOARD */}
-      <section className="px-6 md:px-10 py-20 max-w-7xl mx-auto">
-        <div className="mb-12">
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 03 / Advisory Board</span>
-          <h2 className="text-4xl md:text-6xl font-display font-bold uppercase leading-[0.95]">
-            Our advisory<br />board.
-          </h2>
-        </div>
-        {data.advisoryBoard.length === 0 ? (
-          <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground py-8">
-            Add Advisory Board members in the Studio.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-            {data.advisoryBoard.map((p, i) => (
-              <AdvisoryCard key={p._id} person={p} index={i} />
-            ))}
-          </div>
-        )}
-      </section>
     </>
   );
 }
