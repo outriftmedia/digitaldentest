@@ -21,7 +21,7 @@ export type Person = { _id: string; name: string; designation?: string; linkedin
 export type LandingAboutData = { definition?: PortableTextBlock[]; imageUrl?: string; ddTeam: Person[]; };
 
 const blocks = [
-  { icon: Layers, title: "Venture Building", desc: "From idea to launch — we build alongside founders.", to: "/platform", tag: null as string | null, span: "md:col-span-3 md:row-span-2" },
+  { icon: Layers, title: "Venture Building", desc: "From idea to launch — we build alongside founders.", to: "/platform", tag: null as string | null, span: "md:col-span-3" },
   { icon: Rocket, title: "Programs", desc: "Acceleration tracks across the Balkans, Europe and the US.", to: "/programs", tag: null, span: "md:col-span-2" },
   { icon: Globe2, title: "Global Network", desc: "Partners across 4 continents opening real doors.", to: "/partners", tag: null, span: "md:col-span-2" },
   { icon: TrendingUp, title: "VC", desc: "A fund built for ambitious founders, in development.", to: "/platform", tag: "Coming 2026", span: "md:col-span-3" },
@@ -243,10 +243,14 @@ export function HomeClient({
                       </span>
                     )}
                     <b.icon size={24} strokeWidth={1.25} className="text-accent transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-1" />
-                    <div>
-                      <h3 className="font-display text-lg md:text-xl font-bold uppercase mb-2 group-hover:text-accent transition-colors">{b.title}</h3>
-                      <p className="text-xs md:text-sm text-muted-foreground mb-5 max-w-xs">{b.desc}</p>
-                      <ArrowUpRight size={18} className="text-accent group-hover:rotate-45 transition-transform" />
+                    <div className="flex flex-col justify-between h-full">
+                      <div>
+                        <h3 className="font-display text-lg md:text-xl font-bold uppercase mb-2 group-hover:text-accent transition-colors">{b.title}</h3>
+                        <p className="text-xs md:text-sm text-muted-foreground mb-5 max-w-xs">{b.desc}</p>
+                      </div>
+                      <div className="mt-2">
+                        <ArrowUpRight size={18} className="text-accent group-hover:rotate-45 transition-transform" />
+                      </div>
                     </div>
                     <div className="absolute -bottom-20 -right-20 size-48 bg-accent/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   </Link>
