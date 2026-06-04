@@ -211,41 +211,49 @@ export function HomeClient({
 
       {/* WHAT IS DIGITAL DEN — 2x2 staggered bento */}
       <section className="px-6 md:px-10 py-20 md:py-24 max-w-7xl mx-auto">
-        <div className="mb-12 max-w-2xl">
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-4 block">— 02 / The Ecosystem</span>
-          <h2 className="text-2xl md:text-3xl font-display font-bold uppercase leading-tight enter-fade-up">
-            A launch platform for ambitious founders.
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-5 md:auto-rows-[190px] gap-4">
-          {blocks.map((b, i) => (
-            <motion.div
-              key={b.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className={b.span}
-            >
-              <Link
-                href={b.to}
-                className="group glass-card p-8 h-full flex flex-col justify-between hover:border-accent/60 hover:-translate-y-1 transition-all duration-500 relative overflow-hidden block"
-              >
-                {b.tag && (
-                  <span className="absolute top-4 right-4 text-[10px] font-mono uppercase tracking-widest text-accent border border-accent/40 px-2.5 py-1 rounded-full">
-                    {b.tag}
-                  </span>
-                )}
-                <b.icon size={24} strokeWidth={1.25} className="text-accent transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-1" />
-                <div>
-                  <h3 className="font-display text-lg md:text-xl font-bold uppercase mb-2 group-hover:text-accent transition-colors">{b.title}</h3>
-                  <p className="text-xs md:text-sm text-muted-foreground mb-5 max-w-xs">{b.desc}</p>
-                  <ArrowUpRight size={18} className="text-accent group-hover:rotate-45 transition-transform" />
-                </div>
-                <div className="absolute -bottom-20 -right-20 size-48 bg-accent/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              </Link>
-            </motion.div>
-          ))}
+        <div className="md:grid md:grid-cols-12 md:gap-12 items-start mb-12">
+          <div className="md:col-span-6 mb-8 md:mb-0">
+            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent mb-6 block">— 02 / The Ecosystem</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold uppercase leading-tight enter-fade-up mb-6">
+              A launch platform for ambitious founders.
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground max-w-prose leading-relaxed">
+              Programs, venture building, partnerships and capital — structured so founders can scale from local to global with clarity and momentum.
+            </p>
+          </div>
+
+          <div className="md:col-span-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 md:auto-rows-[190px] gap-4">
+              {blocks.map((b, i) => (
+                <motion.div
+                  key={b.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  className={b.span}
+                >
+                  <Link
+                    href={b.to}
+                    className="group glass-card p-8 h-full flex flex-col justify-between hover:border-accent/60 hover:-translate-y-1 transition-all duration-500 relative overflow-hidden"
+                  >
+                    {b.tag && (
+                      <span className="absolute top-4 right-4 text-[10px] font-mono uppercase tracking-widest text-accent border border-accent/40 px-2.5 py-1 rounded-full">
+                        {b.tag}
+                      </span>
+                    )}
+                    <b.icon size={24} strokeWidth={1.25} className="text-accent transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-1" />
+                    <div>
+                      <h3 className="font-display text-lg md:text-xl font-bold uppercase mb-2 group-hover:text-accent transition-colors">{b.title}</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground mb-5 max-w-xs">{b.desc}</p>
+                      <ArrowUpRight size={18} className="text-accent group-hover:rotate-45 transition-transform" />
+                    </div>
+                    <div className="absolute -bottom-20 -right-20 size-48 bg-accent/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -257,7 +265,7 @@ export function HomeClient({
             <h2 className="text-2xl md:text-3xl font-display font-bold uppercase enter-fade-up">From idea to global.</h2>
           </div>
 
-          <div className="relative h-[180px] md:h-[230px] mb-16">
+          <div className="relative h-45 md:h-57.5 mb-16">
             {/* Curved trajectory line */}
             <svg
               viewBox="0 0 1000 200"
@@ -376,7 +384,7 @@ export function HomeClient({
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          className="relative aspect-[2/1] rounded-xl overflow-hidden bg-black border border-border"
+          className="relative aspect-2/1 rounded-xl overflow-hidden bg-black border border-border"
         >
           {/* World map image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -538,7 +546,7 @@ function NewsCarousel() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.06 }}
-            className="snap-start shrink-0 w-[80vw] md:w-[360px] glass-card p-7 rounded-xl group hover:border-accent/60 hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between min-h-[220px]"
+            className="snap-start shrink-0 w-[80vw] md:w-90 glass-card p-7 rounded-xl group hover:border-accent/60 hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between min-h-55"
           >
             <div className="flex items-center justify-between">
               <span className="font-mono text-[10px] uppercase tracking-widest text-accent border border-accent/40 px-2 py-1 rounded-full">{item.tag}</span>
